@@ -1,3 +1,11 @@
+# =========================================================
+# @purpose: principal components analysis
+# @date：   2019/12
+# @version: v1.0
+# @author： Xu Huasheng
+# @github： https://github.com/xuhuasheng/pca
+# =========================================================
+
 from sklearn.externals import joblib  
 import numpy as np  
 import glob  
@@ -5,7 +13,10 @@ import os
 import time  
 
 
-def pca(dataMat, r, autoset_r=False, autoset_rate=0.9):   
+def pca(dataMat, r, autoset_r=False, autoset_rate=0.9): 
+    """
+    purpose: principal components analysis
+    """  
     print("Start to do PCA...") 
     t1 = time.time() 
     meanVal = np.mean(dataMat, axis=0) # 竖着求平均值，数据格式是m×n
@@ -16,7 +27,7 @@ def pca(dataMat, r, autoset_r=False, autoset_rate=0.9):
     eigValIndex = np.argsort(-eigVals) # 特征值由大到小排序，eigValIndex是特征值索引的重排列 1×n维
 
     # 自动设置r的取值
-    if autoset_r == True:
+    if autoset_r:
         r = autoset_eigNum(eigVals, autoset_rate)
         print("autoset: take top {} of {} features".format(r, meanRemoved.shape[1]))
 
@@ -31,9 +42,9 @@ def pca(dataMat, r, autoset_r=False, autoset_rate=0.9):
     return lowDDataMat, reconMat
 
 
-def autoset_eigNum(eigValues, rate):
+def autoset_eigNum(eigValues, rate=0.99):
     """
-    purpose: 
+    purpose: Automatically set the optimal number of eigen vectors
     """
     eigValues_sorted = sorted(eigValues, reverse=True)
     eigVals_total = eigValues.sum()
